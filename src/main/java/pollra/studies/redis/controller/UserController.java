@@ -1,5 +1,6 @@
 package pollra.studies.redis.controller;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,15 +23,17 @@ public class UserController {
 	public String create(
 			@RequestBody UserCreateRequest userCreateRequest
 	) {
-		return userRepository.save(
-				User.builder()
-					.email(userCreateRequest.email())
-					.name(userCreateRequest.name())
-					.age(userCreateRequest.age())
-					.build()
-		).getId();
+		User save = userRepository.save(
+			User.builder()
+				.email(userCreateRequest.email())
+				.name(userCreateRequest.name())
+				.age(userCreateRequest.age())
+				.build()
+		);
+		return save.getId();
 	}
 
+	@Cacheable(value = "users", key = "#id")
 	@GetMapping("/{id}")
 	public User get(@PathVariable String id) {
 		return userRepository.findById(id).orElseThrow();

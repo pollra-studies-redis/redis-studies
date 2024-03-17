@@ -32,6 +32,8 @@ dependencies {
     // Embedded Redis for testing
     testImplementation 'it.ozimov:embedded-redis:0.7.3'
 
+    //spring-boot-starter-cache
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
 }
 
 tasks.named('test') {
